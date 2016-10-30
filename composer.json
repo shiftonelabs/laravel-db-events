@@ -1,0 +1,38 @@
+{
+    "name": "shiftonelabs/laravel-db-events",
+    "description": "Add extra database events.",
+    "keywords": ["laravel", "lumen", "database", "events"],
+    "homepage": "https://github.com/shiftonelabs/laravel-db-events",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Patrick Carlo-Hickman",
+            "email": "patrick@shiftonelabs.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/shiftonelabs/laravel-db-events/issues",
+        "source": "https://github.com/shiftonelabs/laravel-db-events"
+    },
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/database": ">=4.1",
+        "illuminate/support": ">=4.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~5.4",
+        "mockery/mockery": "~0.9",
+        "laravel/framework": ">=4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "ShiftOneLabs\\LaravelDbEvents\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ShiftOneLabs\\LaravelDbEvents\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable"
+}
