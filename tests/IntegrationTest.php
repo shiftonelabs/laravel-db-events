@@ -14,7 +14,7 @@ class IntegrationTest extends TestCase
 
     public function testInvalidConnectionIsInvalid()
     {
-        $this->expectException('InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
 
         $connection = $this->getConnection('invalid');
         $connection->getPdo();
@@ -27,7 +27,7 @@ class IntegrationTest extends TestCase
             return;
         }
 
-        $this->expectException('InvalidArgumentException');
+        $this->setExpectedException('InvalidArgumentException');
 
         $events = $this->app['events'];
         $events->listen('ShiftOneLabs\LaravelDbEvents\Extension\Database\Events\DatabaseConnecting', function ($event) {
