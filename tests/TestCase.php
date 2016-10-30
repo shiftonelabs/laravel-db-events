@@ -42,8 +42,7 @@ class TestCase extends BaseTestCase
         return $app;
     }
 
-    protected function getConnection($name = null)
-    {
+    protected function getConnection($name = null) {
         return $this->app['db']->connection($name);
     }
 
