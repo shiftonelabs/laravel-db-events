@@ -10,5 +10,9 @@ php:
 before_script:
   - composer self-update
   - composer install --prefer-source --no-interaction --dev
+  - pear install PHP_CodeSniffer
+  - phpenv rehash
 
-script: phpunit
+script:
+  - phpunit
+  - phpcs --standard=ruleset.xml .
