@@ -200,7 +200,7 @@ class ConnectorTest extends TestCase
 
         $connector = $this->getPdoStubConnector($driver);
 
-        $this->expectException('ShiftOneLabs\LaravelDbEvents\Exceptions\ConnectingException');
+        $this->setExpectedException('ShiftOneLabs\LaravelDbEvents\Exceptions\ConnectingException');
 
         $connector->connect(['name' => $driver]);
     }
