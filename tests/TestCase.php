@@ -1,23 +1,22 @@
 <?php
-
 namespace ShiftOneLabs\LaravelDbEvents\Tests;
 
 use Mockery as m;
 use ReflectionMethod;
+use Laravel\Lumen\Application;
 use Illuminate\Config\Repository;
-use Illuminate\Foundation\Application;
+use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use ShiftOneLabs\LaravelDbEvents\Tests\Stubs\PdoStub;
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
+
     public function createApplication()
     {
         $app = new Application();
-        $app->register('Illuminate\Database\DatabaseServiceProvider');
+        $app->withEloquent();
         $app->register('ShiftOneLabs\LaravelDbEvents\LaravelDbEventsServiceProvider');
 
-        // Laravel 4 uses the LoaderInterface, Laravel 5 does not.
         if (interface_exists('Illuminate\Config\LoaderInterface')) {
             $app->instance('config', $config = new Repository(m::mock('Illuminate\Config\LoaderInterface'), 'testing'));
             $config->getLoader()->shouldReceive('load')->andReturn([]);
@@ -30,11 +29,11 @@ class TestCase extends BaseTestCase
             'connections' => [
                 'valid' => [
                     'driver' => 'sqlite',
-                    'database' => ':memory:',
+                    'database'  => ':memory:',
                 ],
                 'invalid' => [
                     'driver' => 'sqlite',
-                    'database' => 'memory',
+                    'database'  => 'memory',
                 ],
             ],
         ];
@@ -78,7 +77,6 @@ class TestCase extends BaseTestCase
         if ($withEvents && !$connector->usingEvents() && $this->app->bound('events')) {
             $connector->setEventDispatcher($this->app['events']);
         }
-
         return $connector;
     }
 
@@ -86,7 +84,6 @@ class TestCase extends BaseTestCase
     {
         $connector = $this->getMockedConnector($driver, $withEvents);
         $connector->shouldReceive('parentConnect')->andReturn(new PdoStub());
-
         return $connector;
     }
 
