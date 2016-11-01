@@ -61,6 +61,35 @@ class ConnectorTest extends TestCase
         $this->assertTrue($connector->usingEvents());
     }
 
+    public function testMysqlConnectorCanUnsetEvents()
+    {
+        $this->driverConnectorCanUnsetEvents('mysql');
+    }
+
+    public function testPgsqlConnectorCanUnsetEvents()
+    {
+        $this->driverConnectorCanUnsetEvents('pgsql');
+    }
+
+    public function testSqliteConnectorCanUnsetEvents()
+    {
+        $this->driverConnectorCanUnsetEvents('sqlite');
+    }
+
+    public function testSqlsrvConnectorCanUnsetEvents()
+    {
+        $this->driverConnectorCanUnsetEvents('sqlsrv');
+    }
+
+    public function driverConnectorCanUnsetEvents($driver)
+    {
+        $connector = $this->getConnector($driver);
+
+        $connector->unsetEventDispatcher();
+
+        $this->assertFalse($connector->usingEvents());
+    }
+
     public function testMysqlReboundConnectorUsesPdoStub()
     {
         $this->driverReboundConnectorUsesPdoStub('mysql');
@@ -203,5 +232,85 @@ class ConnectorTest extends TestCase
         $this->setExpectedException('ShiftOneLabs\LaravelDbEvents\Exceptions\ConnectingException');
 
         $connector->connect(['name' => $driver]);
+    }
+
+    public function testMysqlDoesntFireConnectingEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectingEventWhenNotUsingEvents('mysql');
+    }
+
+    public function testPgsqlDoesntFireConnectingEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectingEventWhenNotUsingEvents('pgsql');
+    }
+
+    public function testSqliteDoesntFireConnectingEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectingEventWhenNotUsingEvents('sqlite');
+    }
+
+    public function testSqlsrvDoesntFireConnectingEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectingEventWhenNotUsingEvents('sqlsrv');
+    }
+
+    public function driverDoesntFireConnectingEventWhenNotUsingEvents($driver)
+    {
+        if (!$this->app->bound('events')) {
+            $this->markTestSkipped('The Illuminate Event Dispatcher is not available.');
+            return;
+        }
+
+        $_SERVER['__event.test.DatabaseConnecting'] = false;
+        $events = $this->app['events'];
+        $events->listen('ShiftOneLabs\LaravelDbEvents\Extension\Database\Events\DatabaseConnecting', function () {
+            $_SERVER['__event.test.DatabaseConnecting'] = true;
+        });
+
+        $connector = $this->getPdoStubConnector($driver);
+        $connector->unsetEventDispatcher();
+        $connector->connect(['name' => $driver]);
+
+        $this->assertFalse($_SERVER['__event.test.DatabaseConnecting']);
+    }
+
+    public function testMysqlDoesntFireConnectedEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectedEventWhenNotUsingEvents('mysql');
+    }
+
+    public function testPgsqlDoesntFireConnectedEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectedEventWhenNotUsingEvents('pgsql');
+    }
+
+    public function testSqliteDoesntFireConnectedEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectedEventWhenNotUsingEvents('sqlite');
+    }
+
+    public function testSqlsrvDoesntFireConnectedEventWhenNotUsingEvents()
+    {
+        $this->driverDoesntFireConnectedEventWhenNotUsingEvents('sqlsrv');
+    }
+
+    public function driverDoesntFireConnectedEventWhenNotUsingEvents($driver)
+    {
+        if (!$this->app->bound('events')) {
+            $this->markTestSkipped('The Illuminate Event Dispatcher is not available.');
+            return;
+        }
+
+        $_SERVER['__event.test.DatabaseConnected'] = false;
+        $events = $this->app['events'];
+        $events->listen('ShiftOneLabs\LaravelDbEvents\Extension\Database\Events\DatabaseConnected', function () {
+            $_SERVER['__event.test.DatabaseConnected'] = true;
+        });
+
+        $connector = $this->getPdoStubConnector($driver);
+        $connector->unsetEventDispatcher();
+        $connector->connect(['name' => $driver]);
+
+        $this->assertFalse($_SERVER['__event.test.DatabaseConnected']);
     }
 }
