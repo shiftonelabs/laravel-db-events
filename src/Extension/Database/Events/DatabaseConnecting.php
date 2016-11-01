@@ -16,7 +16,6 @@ class DatabaseConnecting extends ConnectorEvent
      * @param \Illuminate\Database\Connectors\Connector  $connector
      * @param string  $name
      * @param array  &$config
-     * @return void
      */
     public function __construct($connector, $name, &$config)
     {

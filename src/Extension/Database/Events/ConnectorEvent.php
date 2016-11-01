@@ -22,7 +22,6 @@ abstract class ConnectorEvent
      *
      * @param \Illuminate\Database\Connectors\Connector  $connector
      * @param string  $name
-     * @return void
      */
     public function __construct($connector, $name)
     {

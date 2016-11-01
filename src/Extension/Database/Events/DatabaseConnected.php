@@ -26,7 +26,6 @@ class DatabaseConnected extends ConnectorEvent
      * @param string  $name
      * @param array  $config
      * @param \PDO  $pdo
-     * @return void
      */
     public function __construct($connector, $name, $config, PDO $pdo)
     {
