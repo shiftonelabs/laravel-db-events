@@ -7,6 +7,7 @@ use ShiftOneLabs\LaravelDbEvents\Extension\Database\Events\DatabaseConnecting;
 
 trait ConnectorConnectTrait
 {
+    use SupportsEvents;
 
     /**
      * Establish a database connection.
